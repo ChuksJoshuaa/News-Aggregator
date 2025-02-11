@@ -1,17 +1,21 @@
 import { GUARDIAN_API_KEY, GUARDIAN_BASE_URL, NEWS_API_KEY, NEWS_BASE_URL } from '@/constants';
 import { ArticleListProps } from '@/interface';
+import { setArticleData } from '@/redux/features/newsSlice';
+import { useAppDispatch } from '@/redux/hooks';
 import axios from 'axios';
 import { useState } from 'react';
 
 const useFetch = () => {
    const [isFetching, setIsFetching] = useState(false);
    const [error, setError] = useState<string | null>(null);
-   const [articles, setArticles] = useState<ArticleListProps | null>(null);
+   const dispatch = useAppDispatch()
 
    const fetchArticles = async (
      keyword: string,
      filters: { category?: string; source?: string; date?: string },
-     isArticleSource: boolean
+     isArticleSource: boolean,
+     page: number,
+     pageSize: number
    ) => {
      setIsFetching(true);
      setError(null);
@@ -26,10 +30,10 @@ const useFetch = () => {
          });
        } else {
          response = await axios.get(`${NEWS_BASE_URL}/everything`, {
-           params: { q: keyword, from: date, apiKey: NEWS_API_KEY },
+           params: { q: keyword ? keyword : 's', from: date ?? undefined, apiKey: NEWS_API_KEY, page, pageSize},
          });
 
-         setArticles(response.data as ArticleListProps);
+         dispatch(setArticleData(response.data as ArticleListProps))
        }
 
        console.log(response.data);
@@ -72,7 +76,7 @@ const useFetch = () => {
       }
     };
 
-  return { articles, isFetching, setIsFetching, error, setError, fetchArticles, fetchGuardianArticles }
+  return { isFetching, setIsFetching, error, setError, fetchArticles, fetchGuardianArticles }
 }
 
 export default useFetch

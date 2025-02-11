@@ -6,10 +6,23 @@ import Layout from '@/components/Layout';
 import Loader from "@/components/Loader";
 import Navbar from '@/components/Navbar';
 import NavProfile from '@/components/NavProfile';
+import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/Searchbar";
 import SelectDropdown from "@/components/SelectDropdown";
 import TextInput from "@/components/TextInput";
 import useArticleHook from "@/components/useArticleHook";
 
-export { ArticleList, Articles, DateInput, Footer, Layout, Loader, Navbar, NavProfile, SearchBar, SelectDropdown, TextInput, useArticleHook };
+export {
+    ArticleList,
+    Articles,
+    DateInput,
+    Footer,
+    Layout,
+    Loader,
+    Navbar,
+    NavProfile, Pagination, SearchBar,
+    SelectDropdown,
+    TextInput,
+    useArticleHook
+};
 

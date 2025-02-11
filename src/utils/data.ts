@@ -13,3 +13,6 @@ export const categoriesOptions: OptionsProps[] = [
     { id: "guardian", name: "The Guardian" },
     { id: "nytimes", name: "New York Times" },
   ];
+
+
+export const PageData = [5, 10, 15, 20];

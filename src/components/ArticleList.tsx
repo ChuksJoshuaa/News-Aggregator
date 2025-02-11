@@ -4,7 +4,7 @@ import React from 'react';
 const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 p-5">
-      {articles?.slice(0, 5)?.map((article, index) => (
+      {articles?.map((article, index) => (
         <div
           key={index}
           className="border border-gray-300 p-4 rounded-md shadow-sm"

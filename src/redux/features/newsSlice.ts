@@ -1,10 +1,14 @@
+import { ArticleListProps, IIProps } from "@/interface";
 import { createSlice } from "@reduxjs/toolkit";
-import { IIProps } from "@/interface";
 
 const initialState: IIProps = {
   loading: true,
   searchTerm: "",
   isSidebarOpen: false,
+  page: 1,
+  pageSize: 5,
+  numberOfPages: 0,
+  articleData: {} as ArticleListProps,
 };
 
 export const newsSlice = createSlice({
@@ -19,12 +23,23 @@ export const newsSlice = createSlice({
     openSidebar: (state, action) => {
       state.isSidebarOpen = action.payload;
     },
+
+    setPage: (state, action) => {
+      state.page = action.payload;
+    },
+    setNumberOfPages: (state, action) => {
+      state.numberOfPages = action.payload;
+    },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload;
+    },
+    setArticleData: (state, action) => {
+      state.articleData = action.payload;
+    },
   },
 });
 
-export const {
-  setLoader,
-  openSidebar,
-} = newsSlice.actions;
+export const { setLoader, openSidebar, setPage, setNumberOfPages, setPageSize, setArticleData } =
+  newsSlice.actions;
 
 export default newsSlice.reducer;

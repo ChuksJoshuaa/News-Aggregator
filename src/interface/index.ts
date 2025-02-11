@@ -2,22 +2,7 @@ export type ChildrenProps = {
   children: React.ReactNode;
 };
 
-export interface IIProps {
-  loading: boolean;
-  searchTerm: string;
-  isSidebarOpen: boolean;
-}
-
 export interface SearchBarProps {
-  onSearch: (
-    keyword: string,
-    filters: {
-      date: string;
-      category: string;
-      source: string;
-      isArticleSource: boolean;
-    }
-  ) => void;
   isArticleSource: boolean;
 }
 
@@ -74,6 +59,16 @@ export interface ArticleProps {
 
 export interface ArticleListProps {
   articles: ArticleProps[];
-  status?: string
-  count?: number
+  status?: string;
+  count?: number;
+}
+
+export interface IIProps {
+  loading: boolean;
+  searchTerm: string;
+  isSidebarOpen: boolean;
+  page: number;
+  pageSize: number;
+  numberOfPages: number;
+  articleData: ArticleListProps;
 }
