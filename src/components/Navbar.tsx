@@ -1,27 +1,18 @@
-import searchSvg from "@/assets/search.svg";
 import toggleSvg from "@/assets/toggle.svg";
+import { NavProfile } from "@/components";
 import { openSidebar } from "@/redux/features/newsSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { NavProfile } from ".";
 
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
   const { isSidebarOpen } = useAppSelector((state) => state.news);
-  const [value, setValue] = useState("");
-
-  const handleChange = () => {
-    console.log(value)
-  };
 
   return (
     <div className="w-full h-[55px] relative bg-[#222]">
       <div
-        className={`main-container flex flex-row ${
-          !isSidebarOpen ? "justify-start" : "justify-between"
-        } items-center`}
+        className={`main-container flex flex-row justify-between tems-center w-full`}
       >
         <Link
           to="/"
@@ -36,33 +27,19 @@ const Navbar = () => {
             Innoscripta
           </h1>
         </Link>
+        
         <div
-          className={`ml-20 md:ml-30 flex justify-between items-center w-full ${
+          className={`mt-4 ${
             !isSidebarOpen ? "block" : "hidden"
           }`}
         >
-          <div className="relative">
-            <input
-              onKeyUp={handleChange}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder="Search name..."
-              className="w-[250px] md:w-[500px] h-[27px] rounded-[4px] bg-white outline-none px-3"
-            />
-            <div className="absolute top-[50%] right-[10px] translate-y-[-50%]">
-              <img
-                src={searchSvg}
-                alt="search"
-                className=" h-4 w-4 text-[#222]"
-              />
-            </div>
-          </div>
           <div>
             <NavProfile />
           </div>
         </div>
 
         <div
-          className={`cursor-pointer ${!isSidebarOpen ? "hidden" : "block"}`}
+          className={`mt-4 cursor-pointer ${!isSidebarOpen ? "hidden" : "block"}`}
           onClick={() => dispatch(openSidebar(true))}
         >
           <img src={toggleSvg} alt="search" className=" h-8 w-8 text-[#222]" />
