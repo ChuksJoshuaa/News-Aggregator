@@ -1,5 +1,5 @@
 import { Footer, Navbar } from "@/components";
-import { Error, Home } from "@/pages";
+import { Error, Home, ArticleSource } from "@/pages";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -10,6 +10,7 @@ const App = () => {
       <ToastContainer />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/articles" element={<ArticleSource />} />
           <Route path="*" element={<Error />} />
         </Routes>
       <Footer />

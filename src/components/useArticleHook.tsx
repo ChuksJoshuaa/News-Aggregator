@@ -1,9 +1,8 @@
-import { fetchArticles } from '@/api/newsApi';
+import useFetch from '@/api/useFetch';
 import { useState } from 'react';
 
 const useArticleHook = () => {
-  const [articles, setArticles] = useState<any[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { fetchArticles } = useFetch()
   const [keyword, setKeyword] = useState("");
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
@@ -11,23 +10,18 @@ const useArticleHook = () => {
 
   const handleSearch = async (
     keyword: string,
-    filters: { date: string; category: string; source: string }
+    filters: {
+      date: string;
+      category: string;
+      source: string;
+      isArticleSource: boolean;
+    }
   ) => {
-    setIsSubmitting(true)
-    const data = await fetchArticles(keyword, filters);
-   
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setArticles(data);
-    }, 500)
+    await fetchArticles(keyword, filters, filters.isArticleSource);
   };
 
   return {
-    articles,
-    setArticles,
     handleSearch,
-    isSubmitting,
-    setIsSubmitting,
     keyword,
     setKeyword,
     date,

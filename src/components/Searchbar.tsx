@@ -1,11 +1,12 @@
+import useFetch from "@/api/useFetch";
 import { DateInput, SelectDropdown, TextInput, useArticleHook } from "@/components";
 import { SearchBarProps } from "@/interface";
 import { categoriesOptions, SourceOptions } from "@/utils/data";
 import React from "react";
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isArticleSource }) => {
+  const { isFetching } = useFetch();
   const {
-    isSubmitting,
     keyword,
     setKeyword,
     date,
@@ -16,7 +17,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     setSource,
   } = useArticleHook()
   const handleSubmit = () => {
-    onSearch(keyword, { date, category, source });
+    onSearch(keyword, { date, category, source, isArticleSource });
   };
   const handleEnterKeyPress = (e: React.KeyboardEvent) => {
     e.preventDefault();
@@ -24,53 +25,61 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       handleSubmit();
     }
   };
+  const isDisabled = isArticleSource ? !category && !source : !keyword && !date 
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-2 pb-2 mb-4 flex flex-col my-2">
+    <div className="bg-white shadow-md rounded px-8 pt-2 pb-2 mb-4 flex flex-col my-2" style={{ height: '350px' }}>
       <div className="-mx-3 flex flex-col mb-6 gap-5">
-        <TextInput
-          label="Articles"
-          name="searchArticles"
-          id="searchArticles"
-          placeholder="-- Search articles --"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-        <DateInput
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          id="date"
-          name="date"
-          placeholder=" -- Enter Date --"
-          label="Date"
-        />
-        <SelectDropdown
-          options={categoriesOptions}
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          name="category"
-          id="category"
-          placeholder="-- Select Category --"
-          label="Category"
-        />
-        <SelectDropdown
-          options={SourceOptions}
-          value={source}
-          onChange={(e) => setSource(e.target.value)}
-          name="source"
-          id="source"
-          placeholder="-- Select Source --"
-          label="Source"
-        />
+        {isArticleSource ? (
+          <>
+            <SelectDropdown
+              options={categoriesOptions}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              name="category"
+              id="category"
+              placeholder="-- Select Category --"
+              label="Category"
+            />
+            <SelectDropdown
+              options={SourceOptions}
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              name="source"
+              id="source"
+              placeholder="-- Select Source --"
+              label="Source"
+            />
+          </>
+        ) : (
+          <>
+            <TextInput
+              label="Articles"
+              name="searchArticles"
+              id="searchArticles"
+              placeholder="-- Search articles --"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            <DateInput
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              id="date"
+              name="date"
+              placeholder=" -- Enter Date --"
+              label="Date"
+            />
+          </>
+        )}
+
         <button
           className={`flex justify-center items-center bg-gray-900 capitalize hover:bg-gray-700 text-white font-[semi-bold] py-[0.7rem] px-4 rounded text-center ${
-            isSubmitting ||
-            (!keyword && !date && !category && !source && "opacity-50")
+            (isFetching || isDisabled) && "opacity-50"
           }`}
           onClick={handleSubmit}
           onKeyDown={handleEnterKeyPress}
-          disabled={isSubmitting || (!keyword && !date && !category && !source)}
+          disabled={isFetching || isDisabled}
         >
-          {isSubmitting && (
+          {isFetching && (
             <div aria-label="Loading..." role="status" className="mr-1">
               <svg className="h-5 w-5 animate-spin" viewBox="3 3 18 18">
                 <path

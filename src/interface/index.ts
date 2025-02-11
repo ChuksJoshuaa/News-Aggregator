@@ -8,23 +8,17 @@ export interface IIProps {
   isSidebarOpen: boolean;
 }
 
-export interface Article {
-  title: string;
-  description: string;
-  url: string;
-  source: string;
-  publishedAt: string;
-}
-
-export interface ArticleListProps {
-  articles: Article[];
-}
-
 export interface SearchBarProps {
   onSearch: (
     keyword: string,
-    filters: { date: string; category: string; source: string }
+    filters: {
+      date: string;
+      category: string;
+      source: string;
+      isArticleSource: boolean;
+    }
   ) => void;
+  isArticleSource: boolean;
 }
 
 export interface SelectDropdownProps {
@@ -41,8 +35,8 @@ export interface SelectDropdownProps {
 
 export type OptionsProps = {
   id: string;
-  name: string
-}
+  name: string;
+};
 
 export interface DateInputProps {
   value: string;
@@ -53,7 +47,6 @@ export interface DateInputProps {
   label?: string;
 }
 
-
 export interface TextInputProps {
   label?: string;
   name: string;
@@ -63,4 +56,24 @@ export interface TextInputProps {
   placeholder?: string;
   error?: string;
   className?: string;
+}
+
+export interface ArticleProps {
+  source?: {
+    id: string | null;
+    name: string;
+  };
+  author?: string;
+  title?: string;
+  description?: string;
+  url?: string;
+  urlToImage?: string | null;
+  publishedAt?: string;
+  content?: string;
+}
+
+export interface ArticleListProps {
+  articles: ArticleProps[];
+  status?: string
+  count?: number
 }

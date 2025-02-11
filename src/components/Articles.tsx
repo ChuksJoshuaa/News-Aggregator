@@ -1,9 +1,8 @@
-import { ArticleList, useArticleHook } from "@/components";
-import React from "react";
+import { ArticleList } from "@/components";
+import { ArticleListProps } from "@/interface";
 
-const Articles: React.FC = () => {
-  const { articles } = useArticleHook();
-  
+const Articles = (props: ArticleListProps) => {
+  const { articles} = props
   return (
     <div>
       <ArticleList articles={articles} />

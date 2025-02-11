@@ -8,7 +8,7 @@ export const categoriesOptions: OptionsProps[] = [
   ]
 
   export const SourceOptions: OptionsProps[] = [
-    { id: "", name: "All Sources" },
+    { id: "ar", name: "All Sources" },
     { id: "newsapi", name: "NewsAPI" },
     { id: "guardian", name: "The Guardian" },
     { id: "nytimes", name: "New York Times" },
