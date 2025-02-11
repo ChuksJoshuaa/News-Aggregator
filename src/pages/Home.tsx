@@ -15,7 +15,7 @@ const Home = () => {
   useEffect(() => {
     setIsLoading(true)
     const fetchData = async () => {
-      await fetchArticles('', {}, false, page, pageSize).then((resp) => {
+      await fetchArticles('', {}, page, pageSize).then((resp) => {
         if (resp) {
           setTimeout(() => {
             setIsLoading(false)

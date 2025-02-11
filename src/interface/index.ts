@@ -63,6 +63,23 @@ export interface ArticleListProps {
   count?: number;
 }
 
+export type GuardianProps = {
+  id?: string;
+  type?: string;
+  sectionId?: string;
+  sectionName?: string;
+  webPublicationDate?: string;
+  webTitle?: string;
+  webUrl?: string;
+  apiUrl?: string;
+  isHosted?: boolean;
+  pillarId?: string;
+  pillarName?: string;
+};
+
+export interface GuardianListProps {
+  articles: GuardianProps[];
+}
 export interface IIProps {
   loading: boolean;
   searchTerm: string;
@@ -71,4 +88,19 @@ export interface IIProps {
   pageSize: number;
   numberOfPages: number;
   articleData: ArticleListProps;
+  guardianArticleData: GuardianProps[];
+}
+
+export interface Tab {
+  id: string;
+  name: string;
+}
+
+export interface TabsProps {
+  selectedIndex: number;
+  setSelectedIndex: (index: number) => void;
+  tabs: Tab[];
+  getTabClass: (isSelected: boolean) => string;
+  selectedTab?: string;
+  setSelectedTab?: (tab: string) => void;
 }

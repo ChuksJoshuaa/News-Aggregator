@@ -1,11 +1,10 @@
 import { ChildrenProps } from "@/interface";
 import { openSidebar, setLoader } from "@/redux/features/newsSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 
 const Layout = ({ children }: ChildrenProps) => {
   const dispatch = useAppDispatch();
-  const { isSidebarOpen } = useAppSelector((state) => state.news)
   const [screenSize, setScreenSize] = useState<number | null>(null);
   const checkWidth = () => {
     let windowWidth = null;
@@ -32,9 +31,9 @@ const Layout = ({ children }: ChildrenProps) => {
     return () => window.removeEventListener("resize", checkWidth);
   }, [screenSize]);
   return (
-    <div className="main-container" style={{ minHeight: "100vh" }}>
+    <div>
       <div
-        className={`layout mt-5 pt-5 ${!isSidebarOpen ? "mx-6" : "mx-1"}`}
+        className={`layout mt-5 pt-5 mx-1`}
       >
         {children}
       </div>

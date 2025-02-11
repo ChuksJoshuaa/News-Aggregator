@@ -64,6 +64,10 @@ a {
   .layout {
     grid-template-columns: 1fr;
   }
+  .main-container{
+    /* max-width: 2000px; */
+    width: 100%
+  }
 }
 
 .input {
@@ -81,25 +85,8 @@ a {
   padding: 20px;
 }
 
-.article-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.article {
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-}
-
 @media (max-width: 768px) {
   .search-bar, .preferences {
     flex-direction: column;
-  }
-
-  .article-list {
-    grid-template-columns: 1fr;
   }
 }

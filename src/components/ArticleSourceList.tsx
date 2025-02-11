@@ -1,7 +1,6 @@
-import { ArticleListProps } from '@/interface';
-import React from 'react';
+import { GuardianListProps } from "@/interface";
 
-const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
+const ArticleSourceList = ({ articles }: GuardianListProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 p-5 w-full">
       {articles?.map((article, index) => (
@@ -10,16 +9,16 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
           className="border border-gray-300 p-4 rounded-md shadow-sm"
         >
           <h2 className="text-lg font-semibold text-blue-900 mb-3 leading-relaxed">
-            {article.title}
+            {article.sectionName}
           </h2>
           <p className="text-gray-700 text-sm leading-relaxed">
-            {(article?.description?.length ?? 0) > 150
-              ? `${article?.description?.slice(0, 150)}...`
-              : article.description}
+            {(article?.webTitle?.length ?? 0) > 150
+              ? `${article?.webTitle?.slice(0, 150)}...`
+              : article.webTitle}
             <span>
-              {(article?.description?.length ?? 0) > 150 && (
+              {(article?.webTitle?.length ?? 0) > 150 && (
                 <a
-                  href={article.url}
+                  href={article.webUrl ?? article?.apiUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 font-medium hover:underline mt-2 inline-block"
@@ -30,13 +29,13 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
             </span>
           </p>
 
-          <div className="flex items-center justify-between text-sm text-gray-700 mt-5 flex-wrap">
+          <div className="flex items-center justify-between text-sm text-gray-700 mt-5">
             <p className="font-medium">
-              Source: {article?.source?.name ?? "Unknown"}
+              Type: {article?.type}
             </p>
             <p className="text-red-600 font-semibold">
               Published:{" "}
-              {new Date(article.publishedAt ?? "").toLocaleDateString()}
+              {new Date(article.webPublicationDate ?? "").toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -45,4 +44,4 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
   );
 };
 
-export default ArticleList;
+export default ArticleSourceList;

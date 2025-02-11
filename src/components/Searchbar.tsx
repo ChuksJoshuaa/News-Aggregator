@@ -9,7 +9,7 @@ import React, { useState } from "react";
 const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useAppDispatch();
-  const { fetchArticles } = useFetch();
+  const { fetchArticles, fetchGuardianArticles } = useFetch();
   const { page, pageSize } = useAppSelector((state) => state.news);
   const {
     keyword,
@@ -35,7 +35,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
     await fetchArticles(
       keyword,
       filters,
-      filters.isArticleSource,
       page,
       pageSize
     ).then((resp) => {
@@ -43,15 +42,36 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
         setTimeout(() => {
           setIsSubmitting(false);
           dispatch(setNumberOfPages(resp.totalResults ?? 0));
-          setKeyword("");
-          setDate("");
+          // setKeyword("");
+          // setDate("");
         }, 500);
       }
     });
   };
 
-  const handleSubmit = () => {
-    handleSearch(keyword, { date, category, source, isArticleSource });
+
+  const handleGuardian = async () => {
+    setIsSubmitting(true);
+    await fetchGuardianArticles(keyword, { section: category, date }, page, pageSize).then((resp) => {
+      if (resp) {
+        setTimeout(() => {
+          setIsSubmitting(false);
+          // setKeyword("");
+          // setDate("");
+          // setCategory('')
+          // setSource('')
+        }, 500);
+      }
+    });
+  }
+
+  const handleSubmit = async () => {
+    if (isArticleSource) {
+      await handleGuardian()
+    }
+    else {
+      await handleSearch(keyword, { date, category, source, isArticleSource });
+    }
   };
   const handleEnterKeyPress = (e: React.KeyboardEvent) => {
     e.preventDefault();
@@ -59,12 +79,31 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
       handleSubmit();
     }
   };
-  const isDisabled = isArticleSource ? !category && !source : !keyword && !date 
+  const isDisabled = isArticleSource ? !category && !keyword && !date && !source : !keyword && !date 
 
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-2 pb-2 mb-4 flex flex-col my-2" style={{ height: '320px' }}>
+    <div
+      className="bg-white shadow-md rounded px-8 pt-2 pb-2 mb-4 flex flex-col my-2"
+      style={{ height: isArticleSource ? "550px" : '320px' }}
+    >
       <div className="-mx-3 flex flex-col mb-6 gap-3">
-        {isArticleSource ? (
+        <TextInput
+          label="Articles"
+          name="searchArticles"
+          id="searchArticles"
+          placeholder="-- Search articles --"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+        <DateInput
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          id="date"
+          name="date"
+          placeholder=" -- Enter Date --"
+          label="Date"
+        />
+        {isArticleSource && (
           <>
             <SelectDropdown
               options={categoriesOptions}
@@ -83,25 +122,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
               id="source"
               placeholder="-- Select Source --"
               label="Source"
-            />
-          </>
-        ) : (
-          <>
-            <TextInput
-              label="Articles"
-              name="searchArticles"
-              id="searchArticles"
-              placeholder="-- Search articles --"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-            />
-            <DateInput
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              id="date"
-              name="date"
-              placeholder=" -- Enter Date --"
-              label="Date"
             />
           </>
         )}
