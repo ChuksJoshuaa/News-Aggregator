@@ -1,7 +1,7 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
-  projectId: "home_tutorly",
+  projectId: "news_aggregator",
   viewportWidth: 1480,
   viewportHeight: 1260,
   video: false,
