@@ -23,11 +23,12 @@ const SelectDropdown = ({
       <select
         className={`${
           error ? "input-invalid" : "input"
-        } appearance-none block w-full bg-grey-lighter border border-red rounded py-3 px-4 mb-1 outline-none ${value ? 'text-gray-700': 'text-gray-400'} ${className}`}
+        } appearance-none block w-full bg-grey-lighter border border-red rounded py-3 px-4 mb-1 outline-none ${value ? "text-gray-700" : "text-gray-400"} ${className}`}
         id={id}
         name={name}
         value={value}
         onChange={onChange}
+        data-testid="select-dropdown"
       >
         <option value="" selected disabled>
           {placeholder}

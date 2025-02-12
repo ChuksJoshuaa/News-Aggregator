@@ -23,16 +23,13 @@ const Navbar = () => {
             className={`text-gray-50 text-3xl font-bold pt-2.5 ${
               !isSidebarOpen ? "ml-5" : "ml-0"
             }`}
+            data-testid="navbar-title"
           >
             Innoscripta
           </h1>
         </Link>
-        
-        <div
-          className={`mt-4 ${
-            !isSidebarOpen ? "block" : "hidden"
-          }`}
-        >
+
+        <div className={`mt-4 ${!isSidebarOpen ? "block" : "hidden"}`}>
           <div>
             <NavProfile />
           </div>

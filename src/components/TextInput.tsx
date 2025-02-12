@@ -28,6 +28,7 @@ const TextInput = ({
         name={name}
         value={value}
         onChange={onChange}
+        data-testid="text-input"
       />
       {error && <div className="text-red-900 text-sm">{error}</div>}
     </div>
