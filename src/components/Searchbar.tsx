@@ -3,13 +3,14 @@ import { DateInput, SelectDropdown, TextInput, useArticleHook } from "@/componen
 import { SearchBarProps } from "@/interface";
 import { setNumberOfPages } from "@/redux/features/newsSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { categoriesOptions, SourceOptions } from "@/utils/data";
+import { categoriesOptions, SourceOptions, TOP_AUTHORS } from "@/utils/data";
+import { savePersonalizedLocalStorage } from "@/utils/useLocalStorage";
 import React, { useState } from "react";
 
-const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource, isPersonalizedFeed }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useAppDispatch();
-  const { fetchArticles, fetchGuardianArticles } = useFetch();
+  const { fetchArticles, fetchGuardianArticles, fetchNYTArticles } = useFetch();
   const { page, pageSize } = useAppSelector((state) => state.news);
   const {
     keyword,
@@ -20,6 +21,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
     setCategory,
     source,
     setSource,
+    author,
+    setAuthor,
+    // EmptyInputFields
   } = useArticleHook()
   
   const handleSearch = async (
@@ -42,8 +46,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
         setTimeout(() => {
           setIsSubmitting(false);
           dispatch(setNumberOfPages(resp.totalResults ?? 0));
-          // setKeyword("");
-          // setDate("");
+          // EmptyInputFields()
         }, 500);
       }
     });
@@ -56,10 +59,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
       if (resp) {
         setTimeout(() => {
           setIsSubmitting(false);
-          // setKeyword("");
-          // setDate("");
-          // setCategory('')
-          // setSource('')
+          // EmptyInputFields()
         }, 500);
       }
     });
@@ -68,6 +68,30 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
   const handleSubmit = async () => {
     if (isArticleSource) {
       await handleGuardian()
+    }
+    else if (!isArticleSource && isPersonalizedFeed) {
+      const personalizedInfo = {
+        keyword,
+        date,
+        category,
+        source,
+        author
+      }
+      savePersonalizedLocalStorage(personalizedInfo)
+      setIsSubmitting(true);
+      await fetchNYTArticles(
+        keyword,
+        { category, date, source, author },
+        page,
+        pageSize
+      ).then((resp) => {
+        if (resp) {
+          setTimeout(() => {
+            setIsSubmitting(false);
+            // EmptyInputFields();
+          }, 500);
+        }
+      });
     }
     else {
       await handleSearch(keyword, { date, category, source, isArticleSource });
@@ -79,12 +103,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
       handleSubmit();
     }
   };
-  const isDisabled = isArticleSource ? !category && !keyword && !date && !source : !keyword && !date 
+  const isDisabled = isArticleSource ? !category && !keyword && !date && !source :
+    !isArticleSource && isPersonalizedFeed ? !category && !keyword && !date && !source && !author :
+      !keyword && !date 
 
   return (
     <div
       className="bg-white shadow-md rounded px-8 pt-2 pb-2 mb-4 flex flex-col my-2"
-      style={{ height: isArticleSource ? "550px" : '320px' }}
+      style={{ height: isArticleSource ? "550px" : !isArticleSource && isPersonalizedFeed ? '670px' :  "320px" }}
     >
       <div className="-mx-3 flex flex-col mb-6 gap-3">
         <TextInput
@@ -103,7 +129,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
           placeholder=" -- Enter Date --"
           label="Date"
         />
-        {isArticleSource && (
+        {(isArticleSource || isPersonalizedFeed) && (
           <>
             <SelectDropdown
               options={categoriesOptions}
@@ -124,6 +150,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ isArticleSource }) => {
               label="Source"
             />
           </>
+        )}
+        {isPersonalizedFeed && (
+          <SelectDropdown
+            options={TOP_AUTHORS}
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            name="author"
+            id="author"
+            placeholder="-- Select top author --"
+            label="Top author"
+          />
         )}
 
         <button

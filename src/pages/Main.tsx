@@ -1,5 +1,5 @@
 import { TabSelector } from '@/components';
-import { ArticleSource, Home } from "@/pages";
+import { ArticleSource, Home, PersonalizedFeed } from "@/pages";
 import { setPage, setPageSize } from '@/redux/features/newsSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import { TabData } from '@/utils/data';
@@ -9,7 +9,7 @@ import { useState } from 'react';
 const Main = () => {
     const dispatch = useAppDispatch()
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [selectedTab, setSelectedTab] = useState("allArticles");
+    const [selectedTab, setSelectedTab] = useState("personalizedFeed");
     
     const getTabSelectorUI = (isSelected: boolean) =>
       `card-bg-color-5 inline-block uppercase ${
@@ -19,7 +19,9 @@ const Main = () => {
       } rounded-t-lg py-3 px-10 text-sm text-center whitespace-nowrap`;
 
     const getTabComponent = () => {
-        switch (selectedTab) {
+      switch (selectedTab) {
+          case 'personalizedFeed':
+                return <PersonalizedFeed />
             case 'allArticles':
                 return <Home />
             case 'articleSources':

@@ -4,6 +4,7 @@ export type ChildrenProps = {
 
 export interface SearchBarProps {
   isArticleSource: boolean;
+  isPersonalizedFeed?: boolean;
 }
 
 export interface SelectDropdownProps {
@@ -103,4 +104,12 @@ export interface TabsProps {
   getTabClass: (isSelected: boolean) => string;
   selectedTab?: string;
   setSelectedTab?: (tab: string) => void;
+}
+
+export interface PersonalizedInfoProps {
+  keyword?: string;
+  date?: string;
+  category?: string;
+  source?: string;
+  author?: string;
 }

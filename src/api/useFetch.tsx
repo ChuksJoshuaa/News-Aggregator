@@ -1,4 +1,4 @@
-import { GUARDIAN_API_KEY, GUARDIAN_BASE_URL, NEWS_API_KEY, NEWS_BASE_URL } from '@/constants';
+import { GUARDIAN_API_KEY, GUARDIAN_BASE_URL, NEW_YORK_TIMES_API_KEY, NEW_YORK_TIMES_BASE_URL, NEWS_API_KEY, NEWS_BASE_URL } from '@/constants';
 import { ArticleListProps } from '@/interface';
 import { setArticleData, setGuardianArticleData, setNumberOfPages, setPage, setPageSize } from '@/redux/features/newsSlice';
 import { useAppDispatch } from '@/redux/hooks';
@@ -26,7 +26,7 @@ const useFetch = () => {
       response = await axios.get(`${NEWS_BASE_URL}/everything`, {
         params: {
           q: keyword ? keyword : "news",
-          from: date ?? undefined,
+          from: date ? date : undefined,
           apiKey: NEWS_API_KEY,
           page,
           pageSize,
@@ -84,7 +84,62 @@ const useFetch = () => {
       }
     };
 
-  return { isFetching, setIsFetching, error, setError, fetchArticles, fetchGuardianArticles }
+   const fetchNYTArticles = async (
+     keyword: string,
+     filters: {
+       date?: string;
+       category?: string;
+       source?: string;
+       author?: string;
+     },
+     page: number,
+     pageSize: number
+   ) => {
+     const { date, category, source, author } = filters;
+
+     const params: Record<string, string | number> = {
+       q: keyword,
+       "api-key": NEW_YORK_TIMES_API_KEY,
+       page, 
+     };
+
+     if (date) params.begin_date = date.replace(/-/g, ""); 
+     if (category) params.fq = `news_desk:("${category}")`; 
+     if (source) params.fq = `source:("${source}")`; 
+     if (author) params.fq = `byline:("${author}")`; 
+
+     try {
+       const response = await axios.get(NEW_YORK_TIMES_BASE_URL, { params });
+       const articles = response.data.response.docs;
+       const totalResults = response.data.response.meta.hits;
+
+       return {
+         articles, 
+         totalResults, 
+         page, 
+         pageSize, 
+       };
+     } catch (error) {
+       console.error("Error fetching NYT articles:", error);
+       return {
+         articles: [],
+         totalResults: 0,
+         page,
+         pageSize,
+       };
+     }
+   };
+
+
+  return {
+    isFetching,
+    setIsFetching,
+    error,
+    setError,
+    fetchArticles,
+    fetchGuardianArticles,
+    fetchNYTArticles,
+  };
 }
 
 export default useFetch

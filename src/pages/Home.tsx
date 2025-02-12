@@ -1,8 +1,9 @@
 import useFetch from "@/api/useFetch";
 import { Articles, Layout, Loader, Pagination, SearchBar } from "@/components";
-import { ArticleProps } from "@/interface";
+import { ArticleProps, PersonalizedInfoProps } from "@/interface";
 import { setNumberOfPages } from "@/redux/features/newsSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { getPersonalizedLocalStorage } from "@/utils/useLocalStorage";
 import React, { useEffect, useState } from "react";
 
 const Home = () => {
@@ -12,25 +13,34 @@ const Home = () => {
   const { page, pageSize, articleData } = useAppSelector(
     (state) => state.news
   );
+
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
+
     const fetchData = async () => {
-      await fetchArticles('', {}, page, pageSize).then((resp) => {
-        if (resp) {
-          setTimeout(() => {
-            setIsLoading(false)
-            dispatch(setNumberOfPages(resp.totalResults ?? 0));
-           }, 500)
-         }
-      })
+      const storedData =
+        (getPersonalizedLocalStorage()?.data as PersonalizedInfoProps) ?? {};
+
+      const keyword = storedData.keyword ?? "";
+      const date = storedData.date ?? "";
+
+      const resp = await fetchArticles(keyword, { date }, page, pageSize);
+      if (resp) {
+        setTimeout(() => {
+          setIsLoading(false);
+          dispatch(setNumberOfPages(resp.totalResults ?? 0));
+        }, 500);
+      }
     };
+
     fetchData();
-  }, [page, pageSize]); 
+  }, [page, pageSize]);
+
 
   return (
     <React.Fragment>
       <Layout>
-        <SearchBar isArticleSource={false} />
+        <SearchBar isArticleSource={false} isPersonalizedFeed={false} />
         <div>
           {isLoading || isFetching ? (
             <div className="flex flex-col justify-center items-center gap-5">
