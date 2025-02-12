@@ -1,6 +1,6 @@
 import { GUARDIAN_API_KEY, GUARDIAN_BASE_URL, NEW_YORK_TIMES_API_KEY, NEW_YORK_TIMES_BASE_URL, NEWS_API_KEY, NEWS_BASE_URL } from '@/constants';
 import { ArticleListProps } from '@/interface';
-import { setArticleData, setGuardianArticleData, setNumberOfPages, setPage, setPageSize } from '@/redux/features/newsSlice';
+import { setArticleData, setGuardianArticleData, setNewYorkArticleData, setNumberOfPages, setPage, setPageSize } from '@/redux/features/newsSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import axios from 'axios';
 import { useState } from 'react';
@@ -113,6 +113,15 @@ const useFetch = () => {
       const response = await axios.get(NEW_YORK_TIMES_BASE_URL, { params });
       const articles = response.data.response.docs;
       const totalResults = response.data.response.meta.hits; 
+
+      dispatch(setPageSize(response.data.response.meta.offset));
+      dispatch(setNumberOfPages(totalResults));
+
+      dispatch(
+        setNewYorkArticleData({
+          docs: articles,
+        })
+      );
 
       return {
         articles, 

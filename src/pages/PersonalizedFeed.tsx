@@ -1,6 +1,6 @@
 import useFetch from "@/api/useFetch"
 import { Layout, Loader, Pagination, PersonalizedArticleList, PersonalizedContent, SearchBar } from "@/components"
-import { PersonalizedInfoProps } from "@/interface"
+import { PersonalizedInfoProps, TimeProps } from "@/interface"
 import { useAppSelector } from "@/redux/hooks"
 import { getPersonalizedLocalStorage } from "@/utils/useLocalStorage"
 import React, { useEffect, useState } from "react"
@@ -8,7 +8,9 @@ import React, { useEffect, useState } from "react"
 const PersonalizedFeed = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { fetchNYTArticles, isFetching } = useFetch();
-  const { page, pageSize } = useAppSelector((state) => state.news);
+  const { page, pageSize, newYorkArticleData } = useAppSelector(
+    (state) => state.news
+  );
 
   useEffect(() => {
     setIsLoading(true)
@@ -57,7 +59,9 @@ const PersonalizedFeed = () => {
             </div>
           ) : (
             <>
-              <PersonalizedArticleList />
+              <PersonalizedArticleList
+                articles={newYorkArticleData?.docs as unknown as TimeProps[]}
+              />
               <Pagination />
             </>
           )}

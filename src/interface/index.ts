@@ -81,6 +81,21 @@ export type GuardianProps = {
 export interface GuardianListProps {
   articles: GuardianProps[];
 }
+
+export type TimeProps = {
+  headline: {
+    main: string
+  },
+  pub_date: string,
+  web_url: string,
+  lead_paragraph: string,
+  news_desk: string
+}
+
+export type NewYorkProps = {
+  docs: Record<string, [TimeProps[]]>;
+};
+
 export interface IIProps {
   loading: boolean;
   searchTerm: string;
@@ -90,6 +105,7 @@ export interface IIProps {
   numberOfPages: number;
   articleData: ArticleListProps;
   guardianArticleData: GuardianProps[];
+  newYorkArticleData: NewYorkProps;
 }
 
 export interface Tab {
@@ -112,4 +128,8 @@ export interface PersonalizedInfoProps {
   category?: string;
   source?: string;
   author?: string;
+}
+
+export interface PersonalizedArticleListProps {
+  articles: TimeProps[];
 }

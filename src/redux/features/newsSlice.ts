@@ -1,4 +1,4 @@
-import { ArticleListProps, GuardianProps, IIProps } from "@/interface";
+import { ArticleListProps, GuardianProps, IIProps, NewYorkProps } from "@/interface";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: IIProps = {
@@ -9,7 +9,8 @@ const initialState: IIProps = {
   pageSize: 10,
   numberOfPages: 0,
   articleData: {} as ArticleListProps,
-  guardianArticleData: [] as GuardianProps[]
+  guardianArticleData: [] as GuardianProps[],
+  newYorkArticleData: {} as NewYorkProps
 };
 
 export const newsSlice = createSlice({
@@ -41,6 +42,10 @@ export const newsSlice = createSlice({
     setGuardianArticleData: (state, action) => {
       state.guardianArticleData = action.payload;
     },
+
+    setNewYorkArticleData: (state, action) => {
+      state.newYorkArticleData = action.payload;
+    },
   },
 });
 
@@ -52,6 +57,7 @@ export const {
   setPageSize,
   setArticleData,
   setGuardianArticleData,
+  setNewYorkArticleData,
 } = newsSlice.actions;
 
 export default newsSlice.reducer;
