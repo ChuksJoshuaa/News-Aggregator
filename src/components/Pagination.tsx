@@ -23,12 +23,13 @@ const Pagination = () => {
   return (
     <div
       className={`mt-10 flex justify-between items-center flex-wrap ${!isSidebarOpen ? "mx-6" : "mx-1"}`}
+      data-testid="pagination"
     >
       <div className="mb-4">
         <select
-            onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
-            className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-            value={pageSize}
+          onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
+          className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+          value={pageSize}
         >
           {PageData?.map((size) => (
             <option key={size} value={size}>
@@ -42,6 +43,7 @@ const Pagination = () => {
           onClick={handlePrevPage}
           disabled={page === 1}
           className={`mb-4 px-4 py-2 text-sm font-medium text-white bg-gray-500 rounded-md hover:bg-gray-600 disabled:bg-gray-300 disabled:cursor-not-allowed`}
+          data-testid="previous-page-button"
         >
           Previous Page
         </button>

@@ -14,13 +14,10 @@ const TabSelector: React.FC<TabsProps> = ({
   };
 
   return (
-    <div className="border-b border-gray-200 mb-4">
+    <div className="border-b border-gray-200 mb-4" data-testid="tab-selector">
       <ul className="flex justify-start mb-px overflow-x-auto">
         {tabs.map((tab, index) => (
-          <li
-            key={tab.id}
-            className="mr-2 list-none flex items-center"
-          >
+          <li key={tab.id} className="mr-2 list-none flex items-center">
             <button
               onClick={() => handleTabClick(index, tab.id)}
               className={getTabClass(selectedIndex === index)}
@@ -30,6 +27,7 @@ const TabSelector: React.FC<TabsProps> = ({
               role="tab"
               aria-controls={tab.id}
               aria-selected={selectedIndex === index}
+              data-testid="tab-button"
             >
               {tab.name}
             </button>
