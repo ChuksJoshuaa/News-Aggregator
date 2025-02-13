@@ -75,7 +75,7 @@ npm run open:cypress
 
 ## Contributing
 
-Contributions are welcome! To contribute to Home tutorly, follow these steps:
+Contributions are welcome! To contribute to project, follow these steps:
 
 1. **Fork the repository**.
 2. **Create a new branch**:
