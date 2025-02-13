@@ -60,7 +60,10 @@ To start the application and begin using project, follow these steps:
    ```bash
    npm run dev
    ```
-2. **Open your web browser** and navigate to ``http://localhost:5173`.
+2. **Open your web browser** and navigate to
+   ```bash
+   http://localhost:5173
+   ```
 
 ## Running Tests
 
