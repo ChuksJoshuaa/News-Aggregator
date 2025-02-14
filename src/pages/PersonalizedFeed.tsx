@@ -41,7 +41,7 @@ const PersonalizedFeed = () => {
 
     fetchData()
   
-  }, [])
+  }, [page, pageSize])
 
 
   return (

@@ -1,6 +1,6 @@
 import { GUARDIAN_API_KEY, GUARDIAN_BASE_URL, NEW_YORK_TIMES_API_KEY, NEW_YORK_TIMES_BASE_URL, NEWS_API_KEY, NEWS_BASE_URL } from '@/constants';
-import { ArticleListProps } from '@/interface';
-import { setArticleData, setGuardianArticleData, setNewYorkArticleData, setNumberOfPages, setPage, setPageSize } from '@/redux/features/newsSlice';
+import { ArticleListProps, GuardianProps } from '@/interface';
+import { setArticleData, setGuardianArticleData, setNewYorkArticleData, setNumberOfPages, setPage } from '@/redux/features/newsSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import axios from 'axios';
 import { useState } from 'react';
@@ -38,6 +38,7 @@ const useFetch = () => {
       return response.data;
     } catch (_) {
       setError("Failed to fetch articles. Please try again.");
+      dispatch(setArticleData({} as ArticleListProps));
       return [];
     } finally {
       setIsFetching(false);
@@ -71,12 +72,12 @@ const useFetch = () => {
 
       dispatch(setNumberOfPages(resp.pages ?? 0));
       dispatch(setPage(resp.currentPage ?? 0));
-      dispatch(setPageSize(resp.pageSize ?? 0));
       dispatch(setGuardianArticleData(resp.results ?? []));
 
       return response.data.response;
     } catch (_) {
       setError("Failed to fetch articles. Please try again.");
+      dispatch(setGuardianArticleData([] as GuardianProps[]));
       return [];
     } finally {
       setIsFetching(false);
@@ -100,6 +101,7 @@ const useFetch = () => {
       q: keyword,
       "api-key": NEW_YORK_TIMES_API_KEY,
       page, 
+      pageSize
     };
 
     if (date) params.begin_date = date.replace(/-/g, "");
@@ -114,7 +116,6 @@ const useFetch = () => {
       const articles = response.data.response.docs;
       const totalResults = response.data.response.meta.hits; 
 
-      dispatch(setPageSize(response.data.response.meta.offset));
       dispatch(setNumberOfPages(totalResults));
 
       dispatch(
@@ -130,6 +131,11 @@ const useFetch = () => {
         pageSize, 
       };
     } catch (_) {
+      dispatch(
+        setNewYorkArticleData({
+          docs: [],
+        })
+      );
       return {
         articles: [],
         totalResults: 0,
